@@ -1,33 +1,27 @@
-# BitMe
+# 🛡️ BitMe: AI Alert-Triage Console
 
-AI alert-triage console for a live hackathon demo. The feed is a **synthetic replay** of `backend/raw_alerts.csv`. Correlation, asset-aware scoring, Gemini briefs (with template fallback), prevention drafts, and the audit log are real code. Prevention commands are **never** executed against a live system.
+**BitMe** is an AI-powered Security Operations Center (SOC) triage console built to accelerate incident response and reduce alert fatigue. 
 
-## 1. Backend (macOS, Python 3.9+)
+Designed for this live hackathon demo, BitMe ingests raw security alerts, correlates them into incidents, ranks them by risk, and uses AI to recommend actionable prevention strategies.
 
-```bash
-cd backend
-python3 -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
-cp .env.example .env
-# paste GEMINI_API_KEY into .env (optional; the UI falls back to templates)
-uvicorn main:app --port 8000
-```
+## 🧠 Under the Hood: What's Real vs. Simulated?
 
-Checks: `python verify.py`
+To demonstrate a fully functional SOC workflow without requiring a live enterprise network, we built a hybrid environment:
 
-## 2. Frontend (second terminal)
+*   ✅ **100% Real Code:** 
+    *   **Asset-Aware Scoring:** A custom risk formula that ranks incidents based on target criticality (e.g., a finance database is prioritized over guest Wi-Fi).
+    *   **AI Integration:** Live Gemini API integration for generating instant incident briefs and step-by-step prevention drafts.
+    *   **Audit Trail:** Secure, persistent logging of all analyst actions to a tamper-evident audit log.
+*   🧪 **Simulated for the Demo:** 
+    *   **The Alert Feed:** A synthetic replay of raw backend alerts mimicking a live, multi-stage attack.
+    *   **Command Execution:** Prevention commands (like blocking IPs or isolating hosts) are safely simulated and never actually executed against a live system.
 
-Needs Node 20.19+ or 22.12+ (Vite 8).
+## 🎬 The Demo Scenario
 
-```bash
-cd frontend
-npm install
-npm run dev
-```
+When evaluating the demo, you will see a simulated attack unfold in real-time:
 
-Open **http://localhost:5173** (Vite proxies `/api` to port 8000).
-
-## Demo path
-
-Start the feed (or Skip to end). Three incidents appear, ranked FIN-DB-01 > CEO-Laptop > Guest-WiFi-04 by the risk formula. Select one for the CSV timeline, generate a brief and a prevention draft, then Approve / Modify / Reject. Execute is simulated and writes the audit log (`backend/audit_log.jsonl`), which survives a refresh.
+1. **Ingestion:** The system replays our synthetic feed of security alerts.
+2. **Triage & Ranking:** Three distinct incidents are correlated and automatically ranked by the risk formula: `FIN-DB-01` (Highest) > `CEO-Laptop` > `Guest-WiFi-04`.
+3. **AI Analysis:** Selecting an incident generates an AI-powered brief explaining the attack vector and drafting remediation commands.
+4. **Human-in-the-Loop:** The analyst can **Approve, Modify, or Reject** the AI's suggestions.
+5. **Resolution:** Executing an action successfully writes to a persistent audit log, demonstrating compliance readiness.
